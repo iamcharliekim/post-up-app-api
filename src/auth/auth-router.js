@@ -46,8 +46,12 @@ authRouter
                         const subject = dbUser.user_name
                         const payload = { user_id: dbUser.id }
 
+                        const paySub = AuthService.veryifyJwt(AuthService.createJWT(subject, payload))
+                        console.log(paySub)
+
                         res.send({
-                            authToken: AuthService.createJWT(subject, payload)
+                            authToken: AuthService.createJWT(subject, payload),
+                                
                         })
                     })
             })

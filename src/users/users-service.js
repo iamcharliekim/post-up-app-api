@@ -23,6 +23,15 @@ const UsersService = {
                 console.log(user)
                 return user
             })
+    },
+
+    getUserById(db, id){
+        return db('postup_users')
+            .returning('*')
+            .where({id})
+            .then(user => {
+                return user[0]
+            })
     }
 
 }

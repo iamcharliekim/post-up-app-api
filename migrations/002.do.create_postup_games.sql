@@ -4,5 +4,6 @@ CREATE TABLE postup_games (
     game_name TEXT NOT NULL,
     game_date TIMESTAMP NOT NULL,
     game_time TIME NOT NULL,
-    game_address TEXT NOT NULL
+    game_address TEXT NOT NULL,
+    attending BIGSERIAL NOT NULL
 );
