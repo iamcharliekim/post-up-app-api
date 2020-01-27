@@ -18,12 +18,20 @@ const GamesService = {
             .returning('*') 
     },
 
-    incrementGameAttendance(db, gameId){
-        return db('postup_games')
-            .select(raw("nextval('postup_games_attending_seq'::regclass)"))
-            .returning(select('last_value').from('post_up_games_attending_seq'))
-            
+    incrementGameRsvp(db, rsvpObj){
+        return db('postup_games_attendance')
+            .insert(rsvpObj)
+            .returning('*')
+    },
+
+    gameAttendanceCounter(db, gameId){
+        return db('postup_games_attendance')
+            .count('*')
+            .where({game_id: gameId})
+            .returning('*')
+            .first()
     }
+    
 
 
 

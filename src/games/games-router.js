@@ -10,8 +10,8 @@ gamesRouter
     .post(requireAuth, jsonBodyParser, (req, res, next)=> {
         console.log('POST GAME /api/games - req.user', req.user)
 
-        const { game_name, game_date, game_time, game_address } = req.body
-        const newGame = { game_name, game_date, game_time, game_address }
+        const { game_name, game_date, game_time, game_street, game_city, game_state, game_zip, game_lat, game_lng } = req.body
+        const newGame = { game_name, game_date, game_time, game_street, game_city, game_state, game_zip, game_lat, game_lng }
         
         newGame.created_by = req.user.id
 
@@ -47,18 +47,28 @@ gamesRouter
     gamesRouter
     .route('/api/games/attendance')
     .post(requireAuth, jsonBodyParser, (req, res, next)=> {
-        
-        res.json(req.body)
-        next()
-        // const { game_name, game_date, game_time, game_address } = req.body
-        // const newGame = { game_name, game_date, game_time, game_address }
-        
-        // newGame.created_by = req.user.id
+        const {game_id} = req.body
+        const attending_user = req.user.id
 
-        // GamesService.insertGame(req.app.get('db'),newGame)
-        //     .then(games => {
-        //         res.json(games)
-        //     })
+        const rsvpObj = {
+            game_id,
+            attending_user
+        }
+
+        console.log('rsvpObj', rsvpObj)
+
+        GamesService.incrementGameRsvp(req.app.get('db'), rsvpObj)
+            .then(rsvp => {
+                console.log('RSVP:', rsvp)
+                GamesService.gameAttendanceCounter(req.app.get('db'), rsvpObj.game_id)
+                    .then(rsvpCount => {
+                        console.log('RSVP COUNT', rsvpCount.count)
+                        res.send(rsvpCount.count)
+                    })
+                
+            })
+            .catch(next)
+        
 
     })
 
