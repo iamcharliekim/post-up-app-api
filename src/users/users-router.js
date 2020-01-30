@@ -3,9 +3,21 @@ const express = require('express')
 const usersRouter = express.Router()
 const jsonBodyParser = express.json()
 const UsersService = require('./users-service')
+const {requireAuth} = require('../middleware/basic-auth')
 
 
 usersRouter
+    .get('/api/user/:user_id', requireAuth, (req, res, next)=> {
+        const user_id = req.params.user_id
+        console.log('USERSROUTER', user_id)
+        UsersService.getUserById(req.app.get('db'), user_id)
+            .then(username => {
+                res.json({username: username.user_name})
+            })
+
+
+
+    })
     .post('/api/users', jsonBodyParser, (req, res, next) => {
 
         const { first_name, last_name, email, user_name, password } = req.body

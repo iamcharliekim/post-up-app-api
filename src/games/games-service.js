@@ -18,6 +18,13 @@ const GamesService = {
             .returning('*') 
     },
 
+    updateGame(db, game, id){
+        return db('postup_games')
+            .where({id})
+            .update(game)
+            .returning('*')
+    },
+
     incrementGameRsvp(db, rsvpObj){
         return db('postup_games_attendance')
             .insert(rsvpObj)
@@ -28,6 +35,12 @@ const GamesService = {
         return db('postup_games_attendance')
             .where({game_id})
             .where({attending_user})
+            .del()
+    },
+
+    deleteGame(db, id){
+        return db('postup_games')
+            .where({id})
             .del()
     },
 
@@ -58,6 +71,15 @@ const GamesService = {
                 }
                 
             })
+    },
+
+    getUsernames(db, id){
+        return db('postup_users')
+            .select('*')
+            .where({id})
+            .returning('*')
+            .first()
+    
     }
     
 

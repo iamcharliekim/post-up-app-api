@@ -10,8 +10,6 @@ authRouter
         const {user_name, password} = req.body
         const loginUser = { user_name, password }
 
-        console.log('loginUser: ', loginUser)
-
         for (const [key, value] of Object.entries(loginUser)){
             if (value == null){
                 return res.status(400).json({
@@ -22,7 +20,6 @@ authRouter
 
         AuthService.getUserWithUserName(req.app.get('db'), loginUser.user_name)
             .then(dbUser => {
-                console.log('dbUser: ', dbUser)
 
                 // IF THERE IS NO MATCH
                 if(!dbUser){
@@ -34,7 +31,6 @@ authRouter
                 // IF THERE IS A MATCH, COMPARE PW'S
                 return AuthService.comparePasswords(loginUser.password, dbUser.password)
                     .then(compareMatch => {
-                        console.log('compareMatch =', compareMatch)
                         // IF THERE IS NO MATCH
                         if (!compareMatch){
                             return res.status(400).json({
@@ -47,7 +43,6 @@ authRouter
                         const payload = { user_id: dbUser.id }
 
                         const paySub = AuthService.veryifyJwt(AuthService.createJWT(subject, payload))
-                        console.log(paySub)
 
                         res.send({
                             authToken: AuthService.createJWT(subject, payload),

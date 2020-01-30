@@ -6,7 +6,7 @@ const UsersService = {
             .where({user_name})
             .first()
             .then(user => {
-                console.log(user)
+                (user)
                 return !user
             })
     },
@@ -20,7 +20,7 @@ const UsersService = {
             .insert(user)
             .returning('*')
             .then(([user]) => {
-                console.log(user)
+                (user)
                 return user
             })
     },

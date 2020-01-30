@@ -5,6 +5,7 @@ const jsonBodyParser = express.json()
 const GamesService = require('./games-service')
 const {requireAuth} = require('../middleware/basic-auth')
 
+
 gamesRouter
     .route('/api/games')
     .post(requireAuth, jsonBodyParser, (req, res, next)=> {
@@ -26,6 +27,29 @@ gamesRouter
 
             })
             .catch(next)
+    })
+
+gamesRouter
+    .route('/api/games/:game_id')    
+    .put(requireAuth, jsonBodyParser, (req, res, next)=> {
+        const updatedGame = req.body
+        const game_id = +req.params.game_id
+        console.log('UPDATED GAME', updatedGame)
+
+        GamesService.updateGame(req.app.get('db'), updatedGame, game_id)
+            .then(games => {
+                res.json(games[0])
+            })
+            .catch(next)
+    })
+    .delete(requireAuth, (req, res, next)=> {
+        const game_id = +req.params.game_id
+
+        GamesService.deleteGame(req.app.get('db'), game_id)
+            .then(games => {
+                console.log('DELETEGAMES', games)
+                res.send('game deleted!')
+            })
     })
 
 gamesRouter
@@ -53,15 +77,21 @@ gamesRouter
         GamesService.isUserAlreadyAttending(req.app.get('db'), rsvpObj.game_id, rsvpObj.attending_user)
             .then(userIsAlreadyAttending => {
                 if(userIsAlreadyAttending){
-                    return 
+                    res.send('User is already attending!') 
                 } else {
                     // if user is not already attending, increment game, get count
                     GamesService.incrementGameRsvp(req.app.get('db'), rsvpObj)
                         .then(rsvp => {
-                            GamesService.gameAttendanceCounter(req.app.get('db'), rsvpObj.game_id)
-                                .then(rsvpCount => {
-                                    res.send(rsvpCount.count)
-                                })                            
+                            GamesService.getUsernames(req.app.get('db'), +req.user.id)
+                                .then(user => {
+                                    console.log(user)
+                                    res.json({
+                                        username: user.user_name,
+                                        id: +user.id
+                                    })                        
+
+                                })
+
                         })
                 }
             })
@@ -75,18 +105,25 @@ gamesRouter
         const game_id = req.params.game_id
         const user_id = req.user.id
 
+
         GamesService.getGameAttendance(req.app.get('db'), game_id)
             .then(attendance => {
+                console.log('$$&*@ ATTENDANCE',attendance)
                 let isUserAttending = attendance.filter(game => game.attending_user === user_id)[0]
-                let userAttendance;
 
-                if (isUserAttending){
-                    userAttendance = true 
-                } else {
-                    userAttendance = false
-                }
+                
+                res.json({
+                    user_id,
+                    attendance: attendance
+                })
+                // let userAttendance;
 
-                res.json(userAttendance)
+                // if (isUserAttending){
+                //     userAttendance = true 
+                // } else {
+                //     userAttendance = false
+                // }
+
             })        
     })
     .delete(requireAuth, (req, res, next)=> {
@@ -97,7 +134,14 @@ gamesRouter
             .then(game => {
                 GamesService.gameAttendanceCounter(req.app.get('db'), game_id)
                 .then(rsvpCount => {
-                    res.send(rsvpCount.count)
+                    GamesService.getUsernames(req.app.get('db'), +req.user.id)
+                    .then(user => {
+                        res.json({
+                            username: user.user_name,
+                            id: +user.id
+                        })                        
+
+                    })
                 })                         
             })
             .catch(next)
