@@ -153,6 +153,7 @@ gamesRouter
         const game_id = req.params.game_id
         GamesService.gameAttendanceCounter(req.app.get('db'), game_id)
             .then(rsvpCount => {
+                console.log('RSVP$$', rsvpCount)
                 res.send(rsvpCount.count)
             })
             .catch(next)

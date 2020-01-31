@@ -15,6 +15,7 @@ const {requireAuth} = require('./middleware/basic-auth')
 const authRouter = require('./auth/auth-router')
 const usersRouter = require('./users/users-router')
 const gamesRouter = require('./games/games-router')
+const commentsRouter = require('./comments/comments-router')
 
 app.use(morgan(morganOption))
 app.use(helmet())
@@ -23,6 +24,7 @@ app.use(cors())
 app.use(authRouter)
 app.use(usersRouter)
 app.use(gamesRouter)
+app.use(commentsRouter)
 
 app.use(function errorHandler(error, req, res, next){
     let response
