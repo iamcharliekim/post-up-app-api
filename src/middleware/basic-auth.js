@@ -9,12 +9,12 @@ function requireAuth(req, res, next) {
   const userId = AuthService.veryifyJwt(authToken.split(' ')[1]).user_id
 
   // get the User Object from DB with userId
-  UsersService.getUserById(req.app.get('db'), userId)
+  return UsersService.getUserById(req.app.get('db'), userId)
     .then(user => {
       //set the userObject on req.user and next()
       req.user = user
       next()
-
+      return null
     })
     .catch(err => {
       console.error(err)

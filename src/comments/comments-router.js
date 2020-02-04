@@ -11,7 +11,6 @@ commentsRouter
     .get((req, res, next)=> {
         CommentsService.getComments(req.app.get('db'))
             .then(comment => {
-                console.log('$$//getCOMMENTS()', comment)
                 res.json(comment)
             })
             .catch(next)
@@ -24,15 +23,10 @@ commentsRouter
         
         UsersService.getUserById(req.app.get('db'), commentObj.user_id)
             .then(user => {
-                console.log(user.user_name)
-
                 commentObj.user_name = user.user_name
-
 
                 CommentsService.insertComment(req.app.get('db'), commentObj)
                     .then(comment => {
-                        console.log(comment)
-
                         res.json(comment[0])
                     
                     })

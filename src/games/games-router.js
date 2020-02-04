@@ -20,10 +20,15 @@ gamesRouter
             })
 
     })
-    .get((req, res, next)=> {
+    .get(requireAuth, (req, res, next)=> {
+        const user_id = req.user.id
         GamesService.getGames(req.app.get('db'))
             .then(games => {
-                res.json(games)
+                let response = {
+                    games,
+                    user_id
+                }
+                res.json(response)
 
             })
             .catch(next)
@@ -34,7 +39,6 @@ gamesRouter
     .put(requireAuth, jsonBodyParser, (req, res, next)=> {
         const updatedGame = req.body
         const game_id = +req.params.game_id
-        console.log('UPDATED GAME', updatedGame)
 
         GamesService.updateGame(req.app.get('db'), updatedGame, game_id)
             .then(games => {
@@ -47,7 +51,6 @@ gamesRouter
 
         GamesService.deleteGame(req.app.get('db'), game_id)
             .then(games => {
-                console.log('DELETEGAMES', games)
                 res.send('game deleted!')
             })
     })
@@ -84,7 +87,6 @@ gamesRouter
                         .then(rsvp => {
                             GamesService.getUsernames(req.app.get('db'), +req.user.id)
                                 .then(user => {
-                                    console.log(user)
                                     res.json({
                                         username: user.user_name,
                                         id: +user.id
@@ -108,7 +110,6 @@ gamesRouter
 
         GamesService.getGameAttendance(req.app.get('db'), game_id)
             .then(attendance => {
-                console.log('$$&*@ ATTENDANCE',attendance)
                 let isUserAttending = attendance.filter(game => game.attending_user === user_id)[0]
 
                 
@@ -116,14 +117,6 @@ gamesRouter
                     user_id,
                     attendance: attendance
                 })
-                // let userAttendance;
-
-                // if (isUserAttending){
-                //     userAttendance = true 
-                // } else {
-                //     userAttendance = false
-                // }
-
             })        
     })
     .delete(requireAuth, (req, res, next)=> {
@@ -153,7 +146,6 @@ gamesRouter
         const game_id = req.params.game_id
         GamesService.gameAttendanceCounter(req.app.get('db'), game_id)
             .then(rsvpCount => {
-                console.log('RSVP$$', rsvpCount)
                 res.send(rsvpCount.count)
             })
             .catch(next)
