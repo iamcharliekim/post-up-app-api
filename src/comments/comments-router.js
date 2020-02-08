@@ -8,7 +8,7 @@ const UsersService = require('../users/users-service')
 
 commentsRouter
     .route('/api/games/comments')
-    .get((req, res, next)=> {
+    .get(requireAuth, (req, res, next)=> {
         CommentsService.getComments(req.app.get('db'))
             .then(comment => {
                 res.json(comment)
@@ -27,7 +27,7 @@ commentsRouter
 
                 CommentsService.insertComment(req.app.get('db'), commentObj)
                     .then(comment => {
-                        res.json(comment[0])
+                        res.status(201).json(comment[0])
                     
                     })
                 })

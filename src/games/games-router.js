@@ -18,8 +18,9 @@ gamesRouter
             .then(games => {
                 res.json(games)
             })
-
+            .catch(next)
     })
+    
     .get(requireAuth, (req, res, next)=> {
         const user_id = req.user.id
         GamesService.getGames(req.app.get('db'))
@@ -62,7 +63,7 @@ gamesRouter
         
         GamesService.getGamesByUserId(req.app.get('db'), userId)
             .then(games => {
-                res.json(games)
+                res.json(200, games)
             })
             .catch(next)
     })
@@ -87,7 +88,7 @@ gamesRouter
                         .then(rsvp => {
                             GamesService.getUsernames(req.app.get('db'), +req.user.id)
                                 .then(user => {
-                                    res.json({
+                                    res.json(201, {
                                         username: user.user_name,
                                         id: +user.id
                                     })                        
@@ -99,7 +100,6 @@ gamesRouter
             })
             .catch(next)
     })
-
 
 gamesRouter
     .route('/api/games/attendance/:game_id')

@@ -11,22 +11,23 @@ usersRouter
         const user_id = req.params.user_id
         UsersService.getUserById(req.app.get('db'), user_id)
             .then(username => {
+                if (!username){
+                    res.status(404).json({ error: 'User does not exist!' })
+                }
+
                 res.json({username: username.user_name})
             })
-
-
-
     })
     .post('/api/users', jsonBodyParser, (req, res, next) => {
-
         const { first_name, last_name, email, user_name, password } = req.body
 
-        
         UsersService.userNameIsUnique(req.app.get('db'), user_name)
             .then(userNameIsUnique => {
                 if (!userNameIsUnique){
                     res.status(400).json({ error: 'Username already taken'})
                 }
+
+                // validate password
 
                 if (userNameIsUnique){
                     return UsersService.hashPassword(password)
