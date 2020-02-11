@@ -11,27 +11,71 @@ function makeUsersArray() {
       password: 'password',
       date_created: new Date('2029-01-22T16:28:32.615Z'),
       date_modified: null
-    },
-    {
-        id: 2,
-        first_name: 'test-user-2',
-        last_name: 'Test user 2',
-        email: 'user2@test.com',
-        user_name: 'TU2',
-        password: 'password2',
-        date_created: new Date('2029-01-22T16:28:32.615Z'),
-        date_modified: null
+  },
+  {
+      id: 2,
+      first_name: 'test-user-2',
+      last_name: 'Test user 2',
+      email: 'user2@test.com',
+      user_name: 'TU2',
+      password: 'password2',
+      date_created: new Date('2029-01-22T16:28:32.615Z'),
+      date_modified: null
       },
       {
-        id: 3,
-        first_name: 'test-user-3',
-        last_name: 'Test user 3',
-        email: 'user3@test.com',
-        user_name: 'TU3',
-        password: 'password3',
-        date_created: new Date('2029-01-22T16:28:32.615Z'),
-        date_modified: null
-      },
+      id: 3,
+      first_name: 'test-user-3',
+      last_name: 'Test user 3',
+      email: 'user3@test.com',
+      user_name: 'TU3',
+      password: 'password3',
+      date_created: new Date('2029-01-22T16:28:32.615Z'),
+      date_modified: null
+      }
+  ]
+}
+
+function makeGamesArray(){
+  return [
+    {
+
+      game_name: 'TestGame1',
+      game_date: '2020-02-04T23:00:00.000Z',
+      game_time: '20:00:00',
+      game_street: '8 Dutrow Ct.', 
+      game_city: 'Clarksburg',
+      game_state: 'MD',
+      game_zip: '20871',
+      game_lat: '39.0712654',
+      game_lng: '-77.1527529',
+      created_by: 1
+  },
+  {
+
+    game_name: 'TestGame2',
+    game_date: '2020-02-04 23:00:00',
+    game_time: '20:00:00',
+    game_street: '9 Dutrow Ct.', 
+    game_city: 'Clarksburg',
+    game_state: 'MD',
+    game_zip: '20871',
+    game_lat: '39.0712654',
+    game_lng: '-77.1527529',
+    created_by: 2
+
+},
+{
+    game_name: 'TestGame3',
+    game_date: '2020-02-04 23:00:00',
+    game_time: '20:00:00',
+    game_street: '12 Dutrow Ct.', 
+    game_city: 'Clarksburg',
+    game_state: 'MD',
+    game_zip: '20871',
+    game_lat: '39.0712654',
+    game_lng: '-77.1527529',
+    created_by: 3
+}
   ]
 }
 
@@ -39,86 +83,32 @@ function makeCommentsArray() {
   return [
     {
       id: 1,
-      user_id: 1,
-      user_name: 'test-user1',
-      comment: 'test comment1',
-      game_id: 1,
-      date_created: new Date('2029-01-22T16:28:32.615Z'),
-      date_modified: null
-    },
-    {
-      id: 2,
       user_id: 2,
-      user_name: 'test-user2',
-      comment: 'test comment2',
+      user_name: 'TU2',
+      comment: 'testcomment1',
       game_id: 2,
-      date_created: new Date('2029-01-22T16:28:32.615Z'),
+      date_created: '2029-01-22T16:28:32.615Z',
       date_modified: null
-    },
-    {
+  },
+  {
+      id: 2,
+      user_id: 1,
+      user_name: 'TU1',
+      comment: 'testcomment2',
+      game_id: 2,
+      date_created: '2029-01-22T16:28:32.615Z',
+      date_modified: null
+  },
+  {
       id: 3,
       user_id: 3,
-      user_name: 'test-user3',
-      comment: 'test comment3',
-      game_id: 3,
-      date_created: new Date('2029-01-22T16:28:32.615Z'),
+      user_name: 'TU3',
+      comment: 'testcomment',
+      game_id: 2,
+      date_created: '2029-01-22T16:28:32.615Z',
       date_modified: null
-    },
+  },
   ]
-}
-
-function makeCommentsArray(users, articles) {
-  return [
-    {
-      id: 1,
-      text: 'First test comment!',
-      article_id: articles[0].id,
-      user_id: users[0].id,
-      date_created: new Date('2029-01-22T16:28:32.615Z'),
-    },
-    {
-      id: 2,
-      text: 'Second test comment!',
-      article_id: articles[0].id,
-      user_id: users[1].id,
-      date_created: new Date('2029-01-22T16:28:32.615Z'),
-    },
-    {
-      id: 3,
-      text: 'Third test comment!',
-      article_id: articles[0].id,
-      user_id: users[2].id,
-      date_created: new Date('2029-01-22T16:28:32.615Z'),
-    },
-    {
-      id: 4,
-      text: 'Fourth test comment!',
-      article_id: articles[0].id,
-      user_id: users[3].id,
-      date_created: new Date('2029-01-22T16:28:32.615Z'),
-    },
-    {
-      id: 5,
-      text: 'Fifth test comment!',
-      article_id: articles[articles.length - 1].id,
-      user_id: users[0].id,
-      date_created: new Date('2029-01-22T16:28:32.615Z'),
-    },
-    {
-      id: 6,
-      text: 'Sixth test comment!',
-      article_id: articles[articles.length - 1].id,
-      user_id: users[2].id,
-      date_created: new Date('2029-01-22T16:28:32.615Z'),
-    },
-    {
-      id: 7,
-      text: 'Seventh test comment!',
-      article_id: articles[3].id,
-      user_id: users[0].id,
-      date_created: new Date('2029-01-22T16:28:32.615Z'),
-    },
-  ];
 }
 
 function makeExpectedArticle(users, article, comments=[]) {
@@ -236,62 +226,26 @@ function seedUsers(db, users){
 
 function seedGames(db, games){ 
   return db.into('postup_games').insert(games)
-    // .then(()=> 
-    //   db.raw(
-    //     `SELECT setval('postup_games_id_seq', ?)`,
-    //     [games[games.length-1].id]
-    //   )
-    // )
 }
 
 function seedComments(db, comments){ 
   return db.into('postup_comments').insert(comments)
-    // .then(()=> 
-    //   db.raw(
-    //     `SELECT setval('postup_games_id_seq', ?)`,
-    //     [games[games.length-1].id]
-    //   )
-    // )
 }
 
 
 function seedArticlesTables(db, users, articles, comments=[]) {
-  // use a transaction to group the queries and auto rollback on any failure
   return db.transaction(async trx => {
-    // await trx.into('blogful_users').insert(users)
     await seedUsers(trx, users)
-    // await trx.into('blogful_articles').insert(articles)
     await trx.into('blogful_articles').insert(articles)
-    // update the auto sequence to match the forced id values
-    // await Promise.all([
-    //   trx.raw(
-    //     `SELECT setval('blogful_users_id_seq', ?)`,
-    //     [users[users.length - 1].id],
-    //   ),
-    //   trx.raw(
-    //     `SELECT setval('blogful_articles_id_seq', ?)`,
-    //     [articles[articles.length - 1].id],
-    //   ),
-    // ])
+
     await trx.raw(
       `SELECT setval('blogful_articles_id_seq', ?)`,
       [articles[articles.length - 1].id],
     )
-    // only insert comments if there are some, also update the sequence counter
-    // if (comments.length) {
-    //   await trx.into('blogful_comments').insert(comments)
-    //   await trx.raw(
-    //     `SELECT setval('blogful_comments_id_seq', ?)`,
-    //     [comments[comments.length - 1].id],
-    //   )
-    // }
   })
 }
 
 function seedMaliciousArticle(db, user, article) {
-  // return db
-  //   .into('blogful_users')
-  //   .insert([user])
     return seedUsers(db, [user])
       .then(() =>
         db
@@ -302,13 +256,11 @@ function seedMaliciousArticle(db, user, article) {
 
 module.exports = {
   makeUsersArray,
-//   makeArticlesArray,
+  makeGamesArray,
   makeExpectedArticle,
   makeExpectedArticleComments,
   makeMaliciousArticle,
   makeCommentsArray,
-
-//   makeArticlesFixtures,
   cleanTables,
   seedGames,
   seedMaliciousArticle,

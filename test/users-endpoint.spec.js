@@ -4,41 +4,9 @@ const helpers = require('./test-helpers')
 
 describe('Users Endpoints', function() {
   let db
-
   let token;
 
-  const testUsers  =  [
-        {
-        id: 1,
-        first_name: 'test-user-1',
-        last_name: 'Test user 1',
-        email: 'user@test.com',
-        user_name: 'TU1',
-        password: 'password',
-        date_created: new Date('2029-01-22T16:28:32.615Z'),
-        date_modified: null
-    },
-    {
-        id: 2,
-        first_name: 'test-user-2',
-        last_name: 'Test user 2',
-        email: 'user2@test.com',
-        user_name: 'TU2',
-        password: 'password2',
-        date_created: new Date('2029-01-22T16:28:32.615Z'),
-        date_modified: null
-        },
-        {
-        id: 3,
-        first_name: 'test-user-3',
-        last_name: 'Test user 3',
-        email: 'user3@test.com',
-        user_name: 'TU3',
-        password: 'password3',
-        date_created: new Date('2029-01-22T16:28:32.615Z'),
-        date_modified: null
-        }
-] 
+  const testUsers  =  helpers.makeUsersArray()
 
   before('make knex instance', () => {
     db = knex({
@@ -80,13 +48,6 @@ describe('Users Endpoints', function() {
 
 
     describe('POST /api/users', ()=> {
-        /*beforeEach('insert users', () =>
-            helpers.seedUsers(
-                db,
-                testUsers,
-            )
-        )*/
-
         const testUser = {
             first_name: 'test-user-1',
             last_name: 'Test user 1',
@@ -94,17 +55,6 @@ describe('Users Endpoints', function() {
             user_name: 'TU1',
             password: 'password'
         }
-
-        const expectedUser = {
-            first_name: 'test-user-1',
-            last_name: 'Test user 1',
-            email: 'user@test.com',
-            user_name: 'TU1',
-            password: "$2a$12$Xr9jX3h98pTmEGQS/MIN8.44CFjewwS1NZ8xVJBq953/1xXgZv1XG",
-            date_created: "2020-02-07T20:24:24.921Z",
-            date_modified: null
-        }
-
 
         it(`responds with 201 when all fields are valid`, ()=> {
             return supertest(app)
@@ -116,13 +66,8 @@ describe('Users Endpoints', function() {
                     expect(user.last_name).to.eql(testUser.last_name)
                     expect(user.email).to.eql(testUser.email)
                     expect(user.user_name).to.eql(testUser.user_name)
-
-                })
-                
-
-
+                })                
         })
-
     })
 
 
@@ -143,8 +88,6 @@ describe('Users Endpoints', function() {
                     'Authorization':`Bearer ${token}`
                 })
                 .expect(200, {username: 'TU1'})
-
-                
         })  
     })
 })

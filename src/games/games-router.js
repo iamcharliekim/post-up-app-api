@@ -5,7 +5,6 @@ const jsonBodyParser = express.json()
 const GamesService = require('./games-service')
 const {requireAuth} = require('../middleware/basic-auth')
 
-
 gamesRouter
     .route('/api/games')
     .post(requireAuth, jsonBodyParser, (req, res, next)=> {
@@ -13,7 +12,6 @@ gamesRouter
         const newGame = { game_name, game_date, game_time, game_street, game_city, game_state, game_zip, game_lat, game_lng }
         
         newGame.created_by = req.user.id
-
         GamesService.insertGame(req.app.get('db'),newGame)
             .then(games => {
                 res.json(games)
@@ -63,7 +61,7 @@ gamesRouter
         
         GamesService.getGamesByUserId(req.app.get('db'), userId)
             .then(games => {
-                res.json(200, games)
+                res.status(200).json(games)
             })
             .catch(next)
     })

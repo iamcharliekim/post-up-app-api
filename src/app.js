@@ -11,7 +11,6 @@ const app = express();
 
 const morganOption = NODE_ENV === 'production' ? 'tiny' : 'common'
 
-const {requireAuth} = require('./middleware/basic-auth')
 const authRouter = require('./auth/auth-router')
 const usersRouter = require('./users/users-router')
 const gamesRouter = require('./games/games-router')

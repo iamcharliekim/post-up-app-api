@@ -6,81 +6,9 @@ describe('Games Endpoints', function() {
   let db
   let token;
 
-  const testUsers  =  [
-    {
-    id: 1,
-    first_name: 'test-user-1',
-    last_name: 'Test user 1',
-    email: 'user@test.com',
-    user_name: 'TU1',
-    password: 'password',
-    date_created: new Date('2029-01-22T16:28:32.615Z'),
-    date_modified: null
-},
-{
-    id: 2,
-    first_name: 'test-user-2',
-    last_name: 'Test user 2',
-    email: 'user2@test.com',
-    user_name: 'TU2',
-    password: 'password2',
-    date_created: new Date('2029-01-22T16:28:32.615Z'),
-    date_modified: null
-    },
-    {
-    id: 3,
-    first_name: 'test-user-3',
-    last_name: 'Test user 3',
-    email: 'user3@test.com',
-    user_name: 'TU3',
-    password: 'password3',
-    date_created: new Date('2029-01-22T16:28:32.615Z'),
-    date_modified: null
-    }
-] 
+  const testUsers  =  helpers.makeUsersArray()
 
-  const testGames  =  [
-      {
-          id: 1,
-          game_name: 'TestGame1',
-          game_date: '2020-02-04T23:00:00.000Z',
-          game_time: '20:00:00',
-          game_street: '8 Dutrow Ct.', 
-          game_city: 'Clarksburg',
-          game_state: 'MD',
-          game_zip: '20871',
-          game_lat: '39.0712654',
-          game_lng: '-77.1527529',
-          created_by: 1
-      },
-      {
-        id: 2,
-        game_name: 'TestGame2',
-        game_date: '2020-02-04 23:00:00',
-        game_time: '20:00:00',
-        game_street: '9 Dutrow Ct.', 
-        game_city: 'Clarksburg',
-        game_state: 'MD',
-        game_zip: '20871',
-        game_lat: '39.0712654',
-        game_lng: '-77.1527529',
-        created_by: 2
-
-    },
-    {
-        id: 3,
-        game_name: 'TestGame3',
-        game_date: '2020-02-04 23:00:00',
-        game_time: '20:00:00',
-        game_street: '12 Dutrow Ct.', 
-        game_city: 'Clarksburg',
-        game_state: 'MD',
-        game_zip: '20871',
-        game_lat: '39.0712654',
-        game_lng: '-77.1527529',
-        created_by: 3
-    }
-] 
+  const testGames  =  helpers.makeGamesArray()
 
   before('make knex instance', () => {
     db = knex({
@@ -135,26 +63,35 @@ describe('Games Endpoints', function() {
   afterEach('cleanup', () => helpers.cleanTables(db))
 
   describe('POST /api/games', ()=> {
-    const testGame = testGames[0]
+    const testGame =     {
+      game_name: 'TestGame4',
+      game_date: '2020-02-04T23:00:00.000Z',
+      game_time: '20:00:00',
+      game_street: '12 Dutrow Ct.', 
+      game_city: 'Clarksburg',
+      game_state: 'MD',
+      game_zip: '20871',
+      game_lat: '39.0712654',
+      game_lng: '-77.1527529',
+  }
 
     it(`responds with 201 when all fields are valid`, ()=> {
         return supertest(app)
             .post('/api/games')
             .set({ 'Authorization':`Bearer ${token}`})
             .send(testGame)
-
-            // .then(res => {
-            //     const game = res.body[0];
-            //     expect(game.game_name).to.eql(testGame.game_name)
-            //     expect(game.game_date).to.eql(testGame.game_date)
-            //     expect(game.game_time).to.eql(testGame.game_time)
-            //     expect(game.game_street).to.eql(testGame.game_street)
-            //     expect(game.game_city).to.eql(testGame.game_city)
-            //     expect(game.game_state).to.eql(testGame.game_state)
-            //     expect(game.game_zip).to.eql(testGame.game_zip)
-            //     expect(game.game_lat).to.eql(testGame.game_lat)
-            //     expect(game.game_lng).to.eql(testGame.game_lng)
-            // })                
+            .then(res => {
+                const game = res.body[0];
+                expect(game.game_name).to.eql(testGame.game_name)
+                expect(game.game_date).to.eql(testGame.game_date)
+                expect(game.game_time).to.eql(testGame.game_time)
+                expect(game.game_street).to.eql(testGame.game_street)
+                expect(game.game_city).to.eql(testGame.game_city)
+                expect(game.game_state).to.eql(testGame.game_state)
+                expect(game.game_zip).to.eql(testGame.game_zip)
+                expect(game.game_lat).to.eql(testGame.game_lat)
+                expect(game.game_lng).to.eql(testGame.game_lng)
+            })                
     })
   })
 
@@ -194,8 +131,7 @@ describe('Games Endpoints', function() {
         game_lat: '39.0712654',
         game_lng: '-77.1527529'
     }
-    
-
+  
     it(`responds with 201 when all fields are valid`, ()=> {
         return supertest(app)
             .put(`/api/games/${game_id}`)
@@ -229,15 +165,29 @@ describe('Games Endpoints', function() {
   })
 
   describe('GET /api/games/mygames', ()=> {
-    const game_id = 1
-    const expectedGame = testGames.filter(game => game.id === game_id)
+    const user_id = 1
+    const expectedGame = testGames.filter(game => game.created_by === user_id)[0]
 
     it(`responds with 200 when all fields are valid`, ()=> {
         return supertest(app)
             .get(`/api/games/mygames`)
             .set({ 'Authorization':`Bearer ${token}`})
-            .expect(200, expectedGame)
-    })
+            .then(res => {
+              const myGames = res.body
+
+              myGames.forEach(game => {
+                expect(game.game_name).to.eql(expectedGame.game_name)
+                expect(game.game_date).to.eql(expectedGame.game_date)
+                expect(game.game_time).to.eql(expectedGame.game_time)
+                expect(game.game_street).to.eql(expectedGame.game_street)
+                expect(game.game_city).to.eql(expectedGame.game_city)
+                expect(game.game_state).to.eql(expectedGame.game_state)
+                expect(game.game_zip).to.eql(expectedGame.game_zip)
+                expect(game.game_lat).to.eql(expectedGame.game_lat)
+                expect(game.game_lng).to.eql(expectedGame.game_lng)
+              })
+            })
+          })
   })
 
   describe('POST /api/games/attendance', ()=> {
@@ -273,7 +223,6 @@ describe('Games Endpoints', function() {
         .expect(200, { username: 'TU1', id: 1 })
 
     })
-
   })
 
   describe('GET api/games/attendance/rsvp/:game_id', ()=> {
@@ -285,10 +234,6 @@ describe('Games Endpoints', function() {
         .set({ 'Authorization':`Bearer ${token}`})
         .expect(200, {})
     })
-
   })
-
-
-
 })
 
