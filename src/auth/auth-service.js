@@ -26,7 +26,6 @@ const AuthService = {
             algorithms: ['HS256']
         })
     }
-
 }
 
 module.exports = AuthService

@@ -5,7 +5,6 @@ const helpers = require('./test-helpers')
 describe('Users Endpoints', function() {
   let db
   let token;
-
   const testUsers  =  helpers.makeUsersArray()
 
   before('make knex instance', () => {
@@ -46,7 +45,6 @@ describe('Users Endpoints', function() {
 
   afterEach('cleanup', () => helpers.cleanTables(db))
 
-
     describe('POST /api/users', ()=> {
         const testUser = {
             first_name: 'test-user-1',
@@ -69,7 +67,6 @@ describe('Users Endpoints', function() {
                 })                
         })
     })
-
 
     describe('GET /api/user/:user_id', ()=> {
         beforeEach('insert users', () =>

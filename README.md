@@ -1,26 +1,41 @@
-# Express Boilerplate!
+# Post-Up Api
+[![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 
-This is a boilerplate project used for starting new projects!
+### Demo: https://iamcharliekim-post-up-app.now.sh/
 
-## Set up
+This API services the Post-Up App.  All endpoints are protected and require a JWT.
 
-Complete the following steps to start a new project (NEW-PROJECT-NAME):
+# Base-URL
+https://sleepy-fjord-75293.herokuapp.com/api
 
-1. Clone this repository to your local machine `git clone BOILERPLATE-URL NEW-PROJECTS-NAME`
-2. `cd` into the cloned repository
-3. Make a fresh start of the git history for this project with `rm -rf .git && git init`
-4. Install the node dependencies `npm install`
-5. Move the example Environment file to `.env` that will be ignored by git and read by the express server `mv example.env .env`
-6. Edit the contents of the `package.json` to use NEW-PROJECT-NAME instead of `"name": "express-boilerplate",`
+# Auth Endpoints
+#### /auth/login
 
-## Scripts
+# Users Endpoints
+#### /user/:user_id:
+#### /users
+#### /user
 
-Start the application `npm start`
+# Games Endpoints
+#### /games
+#### /games/:game_id
+#### /games/attendance
+#### /games/attendance/:game_id
+#### /games/attendance/rsvp/:game_id
+#### /games/mygames
+#### /games/comments
 
-Start nodemon for the application `npm run dev`
 
-Run the tests `npm test`
+### Tech
+* NodeJS
+* Express
+* Knex
+* Morgan
+* Cors
+* Helmet
 
-## Deploying
+### For Testing
+* Mocha
+* Chai
+* Supertest
 
-When your new project is ready for deployment, add a new Heroku application with `heroku create`. This will make a new git remote called "heroku" and you can then `npm run deploy` which will push to this remote's master branch.

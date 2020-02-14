@@ -33,7 +33,6 @@ const UsersService = {
                 return user[0]
             })
     }
-
 }
 
 module.exports = UsersService

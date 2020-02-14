@@ -17,11 +17,10 @@ function requireAuth(req, res, next) {
       return null
     })
     .catch(err => {
-      console.error(err)
       next(err)
     })
   }
-  
+
   module.exports = {
-    requireAuth,
+    requireAuth
   }

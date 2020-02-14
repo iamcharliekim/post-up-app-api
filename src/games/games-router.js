@@ -1,5 +1,4 @@
 const express = require('express')
-
 const gamesRouter = express.Router()
 const jsonBodyParser = express.json()
 const GamesService = require('./games-service')
@@ -21,6 +20,7 @@ gamesRouter
     
     .get(requireAuth, (req, res, next)=> {
         const user_id = req.user.id
+        
         GamesService.getGames(req.app.get('db'))
             .then(games => {
                 let response = {
@@ -28,7 +28,6 @@ gamesRouter
                     user_id
                 }
                 res.json(response)
-
             })
             .catch(next)
     })
@@ -66,13 +65,11 @@ gamesRouter
             .catch(next)
     })
 
-
 gamesRouter
     .route('/api/games/attendance')
     .post(requireAuth, jsonBodyParser, (req, res, next)=> { 
         const {game_id} = req.body
         const attending_user = req.user.id
-
         const rsvpObj = { game_id, attending_user }
 
         // check to see if attending_user already exists in game
@@ -90,9 +87,7 @@ gamesRouter
                                         username: user.user_name,
                                         id: +user.id
                                     })                        
-
                                 })
-
                         })
                 }
             })
@@ -105,12 +100,8 @@ gamesRouter
         const game_id = req.params.game_id
         const user_id = req.user.id
 
-
         GamesService.getGameAttendance(req.app.get('db'), game_id)
             .then(attendance => {
-                let isUserAttending = attendance.filter(game => game.attending_user === user_id)[0]
-
-                
                 res.json({
                     user_id,
                     attendance: attendance
@@ -131,7 +122,6 @@ gamesRouter
                             username: user.user_name,
                             id: +user.id
                         })                        
-
                     })
                 })                         
             })
@@ -142,13 +132,13 @@ gamesRouter
     .route('/api/games/attendance/rsvp/:game_id')
     .get(requireAuth, (req, res, next)=> {
         const game_id = req.params.game_id
+
         GamesService.gameAttendanceCounter(req.app.get('db'), game_id)
             .then(rsvpCount => {
                 res.send(rsvpCount.count)
             })
             .catch(next)
     })
-
 
 module.exports = gamesRouter
     

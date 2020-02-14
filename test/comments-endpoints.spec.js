@@ -5,13 +5,9 @@ const helpers = require('./test-helpers')
 describe('Comments Endpoints', function() {
   let db
   let token;
-
   const testUsers  =  helpers.makeUsersArray()
-
   const testGames  =  helpers.makeGamesArray()
-
-const testComments = helpers.makeCommentsArray()
-
+  const testComments = helpers.makeCommentsArray()
 
   before('make knex instance', () => {
     db = knex({

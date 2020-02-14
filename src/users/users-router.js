@@ -1,20 +1,18 @@
 const express = require('express')
-
 const usersRouter = express.Router()
 const jsonBodyParser = express.json()
 const UsersService = require('./users-service')
 const {requireAuth} = require('../middleware/basic-auth')
 
-
 usersRouter
     .get('/api/user/:user_id', requireAuth, (req, res, next)=> {
         const user_id = req.params.user_id
+        
         UsersService.getUserById(req.app.get('db'), user_id)
             .then(username => {
                 if (!username){
                     res.status(404).json({ error: 'User does not exist!' })
                 }
-
                 res.json({username: username.user_name})
             })
     })
@@ -28,11 +26,9 @@ usersRouter
                 }
 
                 // validate password
-
                 if (userNameIsUnique){
                     return UsersService.hashPassword(password)
                         .then(hashedPW => {
-
                             const updatedUser = {
                                 first_name,
                                 last_name,
@@ -43,9 +39,7 @@ usersRouter
 
                             return UsersService.insertUser(req.app.get('db'), updatedUser)
                                 .then( user => {
-                                    res
-                                        .status(201)
-                                        .json(user)
+                                    res.status(201).json(user)
                                 })
                                 .catch(next)
                         })

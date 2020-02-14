@@ -8,8 +8,6 @@ const GamesService = {
         return db('postup_games')
         .returning('*')
         .where({ created_by: userId})
-            
-
     },
     
     insertGame(db, game){
@@ -69,7 +67,6 @@ const GamesService = {
                 } else {
                     return false
                 }
-                
             })
     },
 
@@ -79,12 +76,7 @@ const GamesService = {
             .where({id})
             .returning('*')
             .first()
-    
     }
-    
-
-
-
 }
 
 module.exports = GamesService

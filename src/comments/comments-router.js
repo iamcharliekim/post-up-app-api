@@ -1,5 +1,4 @@
 const express = require('express')
-
 const commentsRouter = express.Router()
 const jsonBodyParser = express.json()
 const CommentsService = require('./comments-service')

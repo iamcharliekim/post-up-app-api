@@ -5,9 +5,7 @@ const helpers = require('./test-helpers')
 describe('Games Endpoints', function() {
   let db
   let token;
-
   const testUsers  =  helpers.makeUsersArray()
-
   const testGames  =  helpers.makeGamesArray()
 
   before('make knex instance', () => {
@@ -63,7 +61,7 @@ describe('Games Endpoints', function() {
   afterEach('cleanup', () => helpers.cleanTables(db))
 
   describe('POST /api/games', ()=> {
-    const testGame =     {
+    const testGame = {
       game_name: 'TestGame4',
       game_date: '2020-02-04T23:00:00.000Z',
       game_time: '20:00:00',

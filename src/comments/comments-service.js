@@ -9,11 +9,7 @@ const CommentsService = {
             .where({game_id: comment.game_id})
             .insert(comment)
             .returning('*')
-    },
-
-
-
-
+    }
 }
 
 module.exports = CommentsService
