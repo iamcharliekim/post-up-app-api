@@ -1,68 +1,66 @@
 const GamesService = {
   getGames(db) {
-    return db("postup_games").returning("*");
+    return db('postup_games').returning('*');
   },
 
   getGamesByUserId(db, userId) {
-    return db("postup_games")
-      .returning("*")
+    return db('postup_games')
+      .returning('*')
       .where({ created_by: userId });
   },
 
   insertGame(db, game) {
-    return db("postup_games")
+    return db('postup_games')
       .insert(game)
-      .returning("*");
+      .returning('*');
   },
 
   updateGame(db, game, id) {
-    return db("postup_games")
+    return db('postup_games')
       .where({ id })
       .update(game)
-      .returning("*");
+      .returning('*');
   },
 
   incrementGameRsvp(db, rsvpObj) {
-    return db("postup_games_attendance")
+    return db('postup_games_attendance')
       .insert(rsvpObj)
-      .returning("*");
+      .returning('*');
   },
 
   deleteGameAttendance(db, game_id, attending_user) {
-    return db("postup_games_attendance")
+    return db('postup_games_attendance')
       .where({ game_id })
       .where({ attending_user })
       .del();
   },
 
   deleteGame(db, id) {
-    return db("postup_games")
+    return db('postup_games')
       .where({ id })
       .del();
   },
 
   gameAttendanceCounter(db, game_id) {
-    return db("postup_games_attendance")
-      .count("*")
+    return db('postup_games_attendance')
+      .count('*')
       .where({ game_id })
-      .returning("*")
+      .returning('*')
       .first();
   },
 
   getGameAttendance(db, game_id) {
-    return db("postup_games_attendance")
+    return db('postup_games_attendance')
       .where({ game_id })
-      .returning("*");
+      .returning('*');
   },
 
   isUserAlreadyAttending(db, game_id, attending_user) {
-    return db("postup_games_attendance")
-      .select("*")
+    return db('postup_games_attendance')
+      .select('*')
       .where({ game_id })
       .then(attendance => {
-        let userAttending = attendance.filter(
-          game => game.attending_user === attending_user
-        );
+        let userAttending = attendance.filter(game => game.attending_user === attending_user);
         if (userAttending.length > 0) {
           return true;
         } else {
@@ -72,12 +70,12 @@ const GamesService = {
   },
 
   getUsernames(db, id) {
-    return db("postup_users")
-      .select("*")
+    return db('postup_users')
+      .select('*')
       .where({ id })
-      .returning("*")
+      .returning('*')
       .first();
-  },
+  }
 };
 
 module.exports = GamesService;

@@ -1,37 +1,37 @@
-const knex = require("knex");
-const app = require("../src/app");
-const helpers = require("./test-helpers");
+const knex = require('knex');
+const app = require('../src/app');
+const helpers = require('./test-helpers');
 
-describe("Games Endpoints", function() {
+describe('Games Endpoints', function() {
   let db;
   let token;
   const testUsers = helpers.makeUsersArray();
   const testGames = helpers.makeGamesArray();
 
-  before("make knex instance", () => {
+  before('make knex instance', () => {
     db = knex({
-      client: "pg",
-      connection: process.env.TEST_DATABASE_URL,
+      client: 'pg',
+      connection: process.env.TEST_DATABASE_URL
     });
-    app.set("db", db);
+    app.set('db', db);
   });
 
   before(done => {
     supertest(app)
-      .post("/api/users")
+      .post('/api/users')
       .send({
-        first_name: "test",
-        last_name: "test",
-        email: "test@test.com",
-        user_name: "testuser",
-        password: "testuser",
+        first_name: 'test',
+        last_name: 'test',
+        email: 'test@test.com',
+        user_name: 'testuser',
+        password: 'testuser'
       })
       .then(user => {
         supertest(app)
-          .post("/api/auth/login")
+          .post('/api/auth/login')
           .send({
-            user_name: "testuser",
-            password: "testuser",
+            user_name: 'testuser',
+            password: 'testuser'
           })
           .end((err, response) => {
             token = response.body.authToken; // save the token!
@@ -40,32 +40,32 @@ describe("Games Endpoints", function() {
       });
   });
 
-  after("disconnect from db", () => db.destroy());
+  after('disconnect from db', () => db.destroy());
 
-  before("cleanup", () => helpers.cleanTables(db));
+  before('cleanup', () => helpers.cleanTables(db));
 
-  beforeEach("insert users", () => helpers.seedUsers(db, testUsers));
+  beforeEach('insert users', () => helpers.seedUsers(db, testUsers));
 
-  beforeEach("insert games", () => helpers.seedGames(db, testGames));
+  beforeEach('insert games', () => helpers.seedGames(db, testGames));
 
-  afterEach("cleanup", () => helpers.cleanTables(db));
+  afterEach('cleanup', () => helpers.cleanTables(db));
 
-  describe("POST /api/games", () => {
+  describe('POST /api/games', () => {
     const testGame = {
-      game_name: "TestGame4",
-      game_date: "2020-02-04T23:00:00.000Z",
-      game_time: "20:00:00",
-      game_street: "12 Dutrow Ct.",
-      game_city: "Clarksburg",
-      game_state: "MD",
-      game_zip: "20871",
-      game_lat: "39.0712654",
-      game_lng: "-77.1527529",
+      game_name: 'TestGame4',
+      game_date: '2020-02-04T23:00:00.000Z',
+      game_time: '20:00:00',
+      game_street: '12 Dutrow Ct.',
+      game_city: 'Clarksburg',
+      game_state: 'MD',
+      game_zip: '20871',
+      game_lat: '39.0712654',
+      game_lng: '-77.1527529'
     };
 
     it(`responds with 201 when all fields are valid`, () => {
       return supertest(app)
-        .post("/api/games")
+        .post('/api/games')
         .set({ Authorization: `Bearer ${token}` })
         .send(testGame)
         .then(res => {
@@ -87,7 +87,7 @@ describe("Games Endpoints", function() {
     const testGame = testGames[0];
 
     return supertest(app)
-      .get("/api/games")
+      .get('/api/games')
       .set({ Authorization: `Bearer ${token}` })
       .then(res => {
         let game1 = res.body.games[0];
@@ -105,19 +105,19 @@ describe("Games Endpoints", function() {
       });
   });
 
-  describe("PUT /api/games/:game_id", () => {
+  describe('PUT /api/games/:game_id', () => {
     const game_id = 1;
     const updatedGame = {
       created_by: 1,
-      game_name: "TestGame1 - updated",
-      game_date: "2020-02-04T23:00:00.000Z",
-      game_time: "20:00:00",
-      game_street: "8 New St.",
-      game_city: "Clarksburg",
-      game_state: "MD",
-      game_zip: "20871",
-      game_lat: "39.0712654",
-      game_lng: "-77.1527529",
+      game_name: 'TestGame1 - updated',
+      game_date: '2020-02-04T23:00:00.000Z',
+      game_time: '20:00:00',
+      game_street: '8 New St.',
+      game_city: 'Clarksburg',
+      game_state: 'MD',
+      game_zip: '20871',
+      game_lat: '39.0712654',
+      game_lng: '-77.1527529'
     };
 
     it(`responds with 201 when all fields are valid`, () => {
@@ -141,7 +141,7 @@ describe("Games Endpoints", function() {
     });
   });
 
-  describe("DELETE /api/games/:game_id", () => {
+  describe('DELETE /api/games/:game_id', () => {
     const game_id = 1;
 
     it(`responds with 200 when all fields are valid`, () => {
@@ -152,11 +152,9 @@ describe("Games Endpoints", function() {
     });
   });
 
-  describe("GET /api/games/mygames", () => {
+  describe('GET /api/games/mygames', () => {
     const user_id = 1;
-    const expectedGame = testGames.filter(
-      game => game.created_by === user_id
-    )[0];
+    const expectedGame = testGames.filter(game => game.created_by === user_id)[0];
 
     it(`responds with 200 when all fields are valid`, () => {
       return supertest(app)
@@ -180,7 +178,7 @@ describe("Games Endpoints", function() {
     });
   });
 
-  describe("POST /api/games/attendance", () => {
+  describe('POST /api/games/attendance', () => {
     const game_id = 1;
 
     it(`responds with 201 when all fields are valid`, () => {
@@ -188,11 +186,11 @@ describe("Games Endpoints", function() {
         .post(`/api/games/attendance`)
         .set({ Authorization: `Bearer ${token}` })
         .send({ game_id })
-        .expect(201, { username: "TU1", id: 1 });
+        .expect(201, { username: 'TU1', id: 1 });
     });
   });
 
-  describe("GET api/games/attendance/:game_id", () => {
+  describe('GET api/games/attendance/:game_id', () => {
     const game_id = 2;
 
     it(`responds with 200 when all fields are valid`, () => {
@@ -203,18 +201,18 @@ describe("Games Endpoints", function() {
     });
   });
 
-  describe("DELETE api/games/attendance/:game_id", () => {
+  describe('DELETE api/games/attendance/:game_id', () => {
     const game_id = 1;
 
     it(`responds with 200 when all fields are valid`, () => {
       return supertest(app)
         .delete(`/api/games/attendance/${game_id}`)
         .set({ Authorization: `Bearer ${token}` })
-        .expect(200, { username: "TU1", id: 1 });
+        .expect(200, { username: 'TU1', id: 1 });
     });
   });
 
-  describe("GET api/games/attendance/rsvp/:game_id", () => {
+  describe('GET api/games/attendance/rsvp/:game_id', () => {
     const game_id = 1;
 
     it(`responds with 200 when all fields are valid`, () => {

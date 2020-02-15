@@ -1,10 +1,10 @@
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const config = require("../config");
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const config = require('../config');
 
 const AuthService = {
   getUserWithUserName(db, user_name) {
-    return db("postup_users")
+    return db('postup_users')
       .where({ user_name })
       .first();
   },
@@ -17,15 +17,15 @@ const AuthService = {
     return jwt.sign(payload, config.JWT_SECRET, {
       subject,
       expiresIn: config.JWT_EXPIRY,
-      algorithm: "HS256",
+      algorithm: 'HS256'
     });
   },
 
   veryifyJwt(token) {
     return jwt.verify(token, config.JWT_SECRET, {
-      algorithms: ["HS256"],
+      algorithms: ['HS256']
     });
-  },
+  }
 };
 
 module.exports = AuthService;

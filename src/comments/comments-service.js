@@ -1,14 +1,14 @@
 const CommentsService = {
   getComments(db) {
-    return db("postup_comments").returning("*");
+    return db('postup_comments').returning('*');
   },
 
   insertComment(db, comment) {
-    return db("postup_comments")
+    return db('postup_comments')
       .where({ game_id: comment.game_id })
       .insert(comment)
-      .returning("*");
-  },
+      .returning('*');
+  }
 };
 
 module.exports = CommentsService;
