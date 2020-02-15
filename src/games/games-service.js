@@ -1,82 +1,83 @@
 const GamesService = {
-    getGames(db){
-        return db('postup_games')
-            .returning('*')
-    },
+  getGames(db) {
+    return db("postup_games").returning("*");
+  },
 
-    getGamesByUserId(db, userId){
-        return db('postup_games')
-        .returning('*')
-        .where({ created_by: userId})
-    },
-    
-    insertGame(db, game){
-        return db('postup_games')
-            .insert(game)
-            .returning('*') 
-    },
+  getGamesByUserId(db, userId) {
+    return db("postup_games")
+      .returning("*")
+      .where({ created_by: userId });
+  },
 
-    updateGame(db, game, id){
-        return db('postup_games')
-            .where({id})
-            .update(game)
-            .returning('*')
-    },
+  insertGame(db, game) {
+    return db("postup_games")
+      .insert(game)
+      .returning("*");
+  },
 
-    incrementGameRsvp(db, rsvpObj){
-        return db('postup_games_attendance')
-            .insert(rsvpObj)
-            .returning('*')
-    },
+  updateGame(db, game, id) {
+    return db("postup_games")
+      .where({ id })
+      .update(game)
+      .returning("*");
+  },
 
-    deleteGameAttendance(db, game_id, attending_user){
-        return db('postup_games_attendance')
-            .where({game_id})
-            .where({attending_user})
-            .del()
-    },
+  incrementGameRsvp(db, rsvpObj) {
+    return db("postup_games_attendance")
+      .insert(rsvpObj)
+      .returning("*");
+  },
 
-    deleteGame(db, id){
-        return db('postup_games')
-            .where({id})
-            .del()
-    },
+  deleteGameAttendance(db, game_id, attending_user) {
+    return db("postup_games_attendance")
+      .where({ game_id })
+      .where({ attending_user })
+      .del();
+  },
 
-    gameAttendanceCounter(db, game_id){
-        return db('postup_games_attendance')
-            .count('*')
-            .where({game_id})
-            .returning('*')
-            .first()
-    },
+  deleteGame(db, id) {
+    return db("postup_games")
+      .where({ id })
+      .del();
+  },
 
-    getGameAttendance(db, game_id){
-        return db('postup_games_attendance')
-            .where({game_id})
-            .returning('*')
-    },
+  gameAttendanceCounter(db, game_id) {
+    return db("postup_games_attendance")
+      .count("*")
+      .where({ game_id })
+      .returning("*")
+      .first();
+  },
 
-    isUserAlreadyAttending(db, game_id, attending_user){
-        return db('postup_games_attendance')
-            .select('*')
-            .where({game_id})
-            .then(attendance => {
-                let userAttending = attendance.filter(game => game.attending_user === attending_user)
-                if (userAttending.length > 0){
-                    return true
-                } else {
-                    return false
-                }
-            })
-    },
+  getGameAttendance(db, game_id) {
+    return db("postup_games_attendance")
+      .where({ game_id })
+      .returning("*");
+  },
 
-    getUsernames(db, id){
-        return db('postup_users')
-            .select('*')
-            .where({id})
-            .returning('*')
-            .first()
-    }
-}
+  isUserAlreadyAttending(db, game_id, attending_user) {
+    return db("postup_games_attendance")
+      .select("*")
+      .where({ game_id })
+      .then(attendance => {
+        let userAttending = attendance.filter(
+          game => game.attending_user === attending_user
+        );
+        if (userAttending.length > 0) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+  },
 
-module.exports = GamesService
+  getUsernames(db, id) {
+    return db("postup_users")
+      .select("*")
+      .where({ id })
+      .returning("*")
+      .first();
+  },
+};
+
+module.exports = GamesService;
