@@ -8,6 +8,6 @@ CREATE TABLE postup_games (
     game_city TEXT NOT NULL,
     game_state TEXT NOT NULL,
     game_zip TEXT,
-    game_lat TEXT NOT NULL,
-    game_lng TEXT NOT NULL
+    game_lat TEXT,
+    game_lng TEXT
 );
